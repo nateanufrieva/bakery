@@ -78,6 +78,7 @@ FROM orders
 
 
 -- Через какой канал и сколько поступило заказов
+
 SELECT
     CASE
         WHEN creation_mean = 'web' THEN 'сайт'
