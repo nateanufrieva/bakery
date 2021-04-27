@@ -1,4 +1,4 @@
--- Топ 5 пекарей сделавших больше всего заказов
+/*Топ 5 пекарей сделавших больше всего заказов*/
 
 SELECT
     u.first_name,
@@ -17,7 +17,7 @@ ORDER BY 4 DESC
 LIMIT 5
 
 
--- Информация о заказах, где клиент недоволен
+/*Информация о заказах, где клиент недоволен*/
 
 SELECT
     delivery_date::date AS "дата",
@@ -47,7 +47,7 @@ FROM bakers
 GROUP BY 1
 
 
--- Хорошо ли пекари выполняют заказы или степень удовлетворенности клиентов пекарней
+/*Хорошо ли пекари выполняют заказы или степень удовлетворенности клиентов пекарней*/
 
 SELECT
     delivery_date::date AS "дата_доставки",
@@ -69,7 +69,7 @@ GROUP BY 1
 ORDER BY 1
 
 
--- Частота комментариев к заказам
+/*Частота комментариев к заказам*/
 
 SELECT
     COUNT(comment) * 100 /
@@ -77,7 +77,7 @@ SELECT
 FROM orders
 
 
--- Через какой канал и сколько поступило заказов
+/*Через какой канал и сколько поступило заказов*/
 
 SELECT
     CASE
@@ -91,7 +91,7 @@ GROUP BY 1
 ORDER BY 2 DESC
 
 
--- Тестируем фичу от gmail на поварах
+/*Тестируем фичу от gmail на поварах*/
 
 SELECT
     email
@@ -100,7 +100,7 @@ WHERE
     type = 'baker' AND lower(email) LIKE '%@gmail.com%'
 
 
--- Смотрим как прошли заказы с комментариями на срочность
+/*Как прошли заказы с комментариями на срочность*/
 
 SELECT
     comment AS "комментарий",
@@ -113,7 +113,7 @@ WHERE
     OR lower(comment) LIKE '%быстр%'
 
 
--- Самый доходный канал
+/*Самый доходный канал*/
 
 SELECT
     CASE
@@ -129,7 +129,7 @@ ORDER BY ROUND(SUM(amount_cents/100 * 0.5)) DESC
 LIMIT 1
 
 
--- Отмененные заказы по месяцам
+/*Отмененные заказы по месяцам*/
 
 SELECT
     date_trunc('month', created_at)::date,
@@ -148,7 +148,7 @@ GROUP BY 1
 ORDER BY 1
 
 
--- Какой процент от общей суммы заказов за месяц составил заказ того или иного покупателя
+/*Какой процент от общей суммы заказов за месяц составил заказ того или иного покупателя*/
 
 SELECT
        date_trunc('month', o.created_at)::date AS month,
@@ -169,13 +169,16 @@ WHERE
 ORDER BY 1,2
 
 
--- Кто из пекарей выполнил заказов на большую сумму
+/*Кто из пекарей выполнил заказов на большую сумму*/
 
 WITH
     best_baker AS (
-        SELECT baker_id, SUM(amount_cents/100)
+        SELECT 
+            baker_id, 
+            SUM(amount_cents/100)
         FROM orders
-        WHERE finished IS TRUE
+        WHERE 
+            finished IS TRUE
         GROUP BY 1
         ORDER BY 2 DESC
         LIMIT 1
@@ -188,13 +191,16 @@ ORDER BY created_at DESC
 LIMIT 1
 
 
--- Какой пекарь лучше всего выполняет заказы 
+/*Какой пекарь лучше всего выполняет заказы*/
  
  WITH
     best_baker AS (
-        SELECT baker_id, AVG(raiting)
+        SELECT 
+            baker_id, 
+            AVG(raiting)
         FROM orders 
-        WHERE raiting IS NOT NULL
+        WHERE 
+            raiting IS NOT NULL
         GROUP BY 1
         ORDER BY 2 DESC
         LIMIT 1
